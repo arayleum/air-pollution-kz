@@ -1,0 +1,5 @@
+city,hours with PM2.5 and PM10,pm25 impossible removed,pm10 impossible removed,PM2.5 > PM10 removed,pm25 interpolated,pm10 interpolated,hours still missing (not used)
+Temirtau,21000,0,13,2,437,455,13642
+Pavlodar,20618,0,0,0,145,153,14298
+Oskemen,25779,0,0,20,94,113,9205
+Karaganda,7686,0,0,501,315,196,27691
