@@ -15,14 +15,11 @@ Code and results for the article *"Development of an Air Pollution Risk Assessme
 ## Repository structure
 ```
 notebook/air_pollution_experiments.ipynb   full pipeline (Google Colab): data -> all tables in results/tables
-                                           and the working figures in results/figures
-make_figures.py                            draws the article figures (results/paper_figures) from results/
+make_figures.py                            draws the article figures from the notebook outputs
 results/tables/                            CSV outputs of the notebook
-results/figures/                           figures drawn by the notebook (working versions)
-results/paper_figures/                     figures exactly as they appear in the article
+results/figures/                           figures exactly as they appear in the article
 results/run_info.json                      versions, seeds, hardware, selected settings, run time
 requirements.txt
-LICENSE
 ```
 
 ## Where each result of the article comes from
@@ -32,18 +29,20 @@ LICENSE
 | Table III – final dataset | `results/tables/table1_dataset.csv`, `cleaning_report.csv` | notebook |
 | Table IV – main results | `results/tables/table2_main_results.csv`, `test_metrics_per_seed.csv` | notebook |
 | Table V – risk classification | `results/tables/table5_risk_classification.csv` | notebook |
-| Fig. 2 – RMSE with 95 % CI | `results/paper_figures/fig2_rmse_ci.pdf` | `make_figures.py` (from `table2_main_results.csv`) |
-| Fig. 3 – Diebold–Mariano tests | `results/paper_figures/fig3_dm_tests.pdf` | `make_figures.py` (from `table4_diebold_mariano.csv`) |
-| Fig. 4 – risk classification | `results/paper_figures/fig4_risk_classification.pdf` | `make_figures.py` (from `table5_risk_classification.csv` and the confusion matrices printed by the notebook) |
-| Fig. 5 – results by city | `results/paper_figures/fig5_by_city.pdf` | `make_figures.py` (from `table6_by_city.csv`) |
-| Fig. 6 – SHAP | `results/paper_figures/fig6_shap_xgb_pm25_h24.pdf` | notebook (`results/figures/fig5_shap_xgb_pm25_h24.pdf`), copied by `make_figures.py` |
+| Fig. 2 – RMSE with 95 % CI | `results/figures/fig2_rmse_ci.pdf` | `make_figures.py` (from `table2_main_results.csv`) |
+| Fig. 3 – Diebold–Mariano tests | `results/figures/fig3_dm_tests.pdf` | `make_figures.py` (from `table4_diebold_mariano.csv`) |
+| Fig. 4 – risk classification | `results/figures/fig4_risk_classification.pdf` | `make_figures.py` (from `table5_risk_classification.csv` and the confusion matrices printed by the notebook) |
+| Fig. 5 – results by city | `results/figures/fig5_by_city.pdf` | `make_figures.py` (from `table6_by_city.csv`) |
+| Fig. 6 – SHAP | `results/figures/fig6_shap_xgb_pm25_h24.pdf` | notebook (saved as `fig5_shap_xgb_pm25_h24.pdf`), copied and renamed by `make_figures.py` |
 | Results by season | `results/tables/table7_mae_by_season.csv` | notebook |
 | Sensitivity to hyperparameters | `results/tables/tuning_validation.csv` (validation metrics of every tried setting) | notebook |
 | Feature importance values | `results/tables/shap_importance.csv` | notebook |
-| Error analysis | `results/tables/table9_top10_errors.csv`, `results/figures/fig6_worst_week_pm25.pdf` | notebook |
+| Error analysis | `results/tables/table9_top10_errors.csv` | notebook |
 
 The CSV names follow the order in which the notebook creates them; there are no files `table3` or `table8` (nothing was removed).
 The article numbers its tables and figures separately, as shown above.
+Besides the article figures, the notebook also draws working figures for exploration
+(`fig1_timeseries_split`, `fig3_confusion_matrices`, `fig4_mae_by_city`, `fig6_worst_week_pm25`); they are not used in the article.
 
 ## Data
 No manual download is needed — the notebook loads everything itself:
@@ -51,7 +50,7 @@ No manual download is needed — the notebook loads everything itself:
   (Temirtau station 200, Pavlodar station 48, Oskemen station 240, Karaganda folder);
 - weather (temperature, relative humidity, wind speed): Open-Meteo historical archive (ERA5), https://open-meteo.com
 
-Data were downloaded in October 2026. The archive may be updated later, so a new run can give slightly different numbers.
+The data belong to their providers and are not redistributed here. Data were downloaded in October 2026. The archive may be updated later, so a new run can give slightly different numbers.
 
 ## How to run
 1. Open `notebook/air_pollution_experiments.ipynb` in Google Colab, select Runtime → Change runtime type → T4 GPU, and run all cells
@@ -59,9 +58,9 @@ Data were downloaded in October 2026. The archive may be updated later, so a new
 2. To draw the article figures, add a new cell at the end of the notebook and run:
    ```
    !wget -q https://raw.githubusercontent.com/arayleum/air-pollution-kz/main/make_figures.py
-   !python make_figures.py /content/results /content/results/paper_figures
+   !python make_figures.py /content/results /content/results/figures
    ```
-   or run `python make_figures.py results results/paper_figures` locally on the unzipped results.
+   or run `python make_figures.py results results/figures` locally on the unzipped results.
 
 ## Environment
 Python 3.13.15 · NumPy 2.1.3 · pandas 2.2.3 · scikit-learn 1.6.1 · XGBoost 3.4.1 · TensorFlow 2.21.0 ·
@@ -70,5 +69,3 @@ Random seeds: 0–4 for the models, 42 for the bootstrap.
 
 ## Authors
 Akbota Abdimutalip (BDA-2401), Arailym Dukenbay (BDA-2403). Supervisor: Mira Bukaeva.
-
-
