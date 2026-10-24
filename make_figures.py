@@ -1,10 +1,3 @@
-"""Draws the figures of the Results section (paper Figs. 2-6) from the notebook outputs.
-
-Usage:  python make_figures.py results results/paper_figures
-        (first argument: folder with tables/ and figures/ written by the notebook)
-All numbers come from the CSV files written by the notebook; the confusion-matrix
-counts are the ones printed by the notebook (cell "RQ3: risk classes").
-"""
 import sys, os, shutil
 import numpy as np
 import pandas as pd
@@ -19,7 +12,6 @@ T = lambda f: pd.read_csv(os.path.join(RES, "tables", f))
 
 MODELS = ["Baseline", "XGBoost", "Random Forest", "SVR", "LSTM"]
 SHORT = {"Baseline": "Baseline", "XGBoost": "XGBoost", "Random Forest": "RF", "SVR": "SVR", "LSTM": "LSTM"}
-# baseline = neutral reference gray; models = validated categorical slots 1-4
 COL = {"Baseline": "#898781", "XGBoost": "#2a78d6", "Random Forest": "#eb6834",
        "SVR": "#1baf7a", "LSTM": "#eda100"}
 INK, INK2, GRID = "#0b0b0b", "#52514e", "#e4e3df"
@@ -37,7 +29,6 @@ def style(ax, grid_axis="y"):
     ax.grid(axis=grid_axis, color=GRID, lw=0.6)
     ax.set_axisbelow(True)
 
-# ---------------------------------------------------------------- Fig. 2 RMSE + CI
 m = T("table2_main_results.csv")
 val = lambda s: float(s.split(" ± ")[0])
 ci = lambda s: [float(x) for x in s.strip("[]").split(", ")]
@@ -55,11 +46,10 @@ for ax, (p, h) in zip(axes, TASKS):
 axes[0].set_ylabel("Test RMSE (µg/m³)")
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig2_rmse_ci.pdf")); plt.close(fig)
 
-# ---------------------------------------------------------------- Fig. 4 risk classification
 CM = {"Baseline": np.array([[4988, 763, 177], [812, 811, 222], [151, 201, 647]]),
       "LSTM":     np.array([[4361, 1476, 91], [566, 1045, 234], [0, 415, 584]])}
 r = T("table5_risk_classification.csv")
-for k, cm in CM.items():  # consistency check against the CSV
+for k, cm in CM.items():
     rec = cm.diagonal() / cm.sum(1)
     exp = r[r.model == k].set_index("class").loc[["safe", "moderate", "dangerous"], "recall"].values
     assert np.allclose(rec, exp, atol=1e-3), k
@@ -91,7 +81,6 @@ ax.set_title("(c) Dangerous class"); style(ax, "both")
 fig.subplots_adjust(left=0.10, right=0.98, bottom=0.2, top=0.88)
 fig.savefig(os.path.join(OUT, "fig4_risk_classification.pdf")); plt.close(fig)
 
-# ---------------------------------------------------------------- Fig. 5 by city
 c = T("table6_by_city.csv"); cities = list(dict.fromkeys(c.city))
 fig, axes = plt.subplots(1, 3, figsize=(7.16, 2.35))
 w = 0.8 / len(MODELS); x = np.arange(len(cities))
@@ -111,7 +100,6 @@ for ax, metric, title, ylab in [
 axes[0].legend(frameon=False, loc="upper left", handlelength=1, handleheight=0.8)
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig5_by_city.pdf")); plt.close(fig)
 
-# ---------------------------------------------------------------- Fig. 3 Diebold-Mariano p-values
 dm = T("table4_diebold_mariano.csv")
 seq = LinearSegmentedColormap.from_list("s", ["#cde2fb", "#86b6ef", "#2a78d6", "#184f95"])
 fig, axes = plt.subplots(1, 4, figsize=(7.16, 2.25))
@@ -135,6 +123,5 @@ for ax, (p, h) in zip(axes, TASKS):
     ax.tick_params(length=0); ax.set_title(TNAME(p, h))
     for s in ax.spines.values(): s.set_visible(False)
 fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig3_dm_tests.pdf")); plt.close(fig)
-# ---------------------------------------------------------------- Fig. 6 SHAP (drawn by the notebook)
 shutil.copy(os.path.join(RES, "figures", "fig5_shap_xgb_pm25_h24.pdf"), os.path.join(OUT, "fig6_shap_xgb_pm25_h24.pdf"))
 print("figures written to", OUT)
