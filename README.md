@@ -39,10 +39,7 @@ requirements.txt
 | Feature importance values | `results/tables/shap_importance.csv` | notebook |
 | Error analysis | `results/tables/table9_top10_errors.csv` | notebook |
 
-The CSV names follow the order in which the notebook creates them; there are no files `table3` or `table8` (nothing was removed).
-The article numbers its tables and figures separately, as shown above.
-Besides the article figures, the notebook also draws working figures for exploration
-(`fig1_timeseries_split`, `fig3_confusion_matrices`, `fig4_mae_by_city`, `fig6_worst_week_pm25`); they are not used in the article.
+
 
 ## Data
 No manual download is needed — the notebook loads everything itself:
