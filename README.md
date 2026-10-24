@@ -71,5 +71,4 @@ Random seeds: 0–4 for the models, 42 for the bootstrap.
 ## Authors
 Akbota Abdimutalip (BDA-2401), Arailym Dukenbay (BDA-2403). Supervisor: Mira Bukaeva.
 
-## License
-Code: MIT (see `LICENSE`). The data belong to their providers (AirData.kz, Open-Meteo) and are not redistributed here.
+
